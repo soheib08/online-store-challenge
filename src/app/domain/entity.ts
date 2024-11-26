@@ -1,8 +1,10 @@
-import { UUIDGenerator } from '../utils/uuid';
+import { UUIDGenerator } from '../utils/uuid-generator';
 
 export abstract class Entity<T> {
   protected _id: string;
   protected _props: T;
+  createdAt: number;
+  updatedAt: number;
 
   constructor(props: T) {
     this._id = UUIDGenerator.create();
@@ -19,5 +21,9 @@ export abstract class Entity<T> {
 
   update(props: Partial<T>): void {
     this._props = { ...this._props, ...props };
+  }
+
+  toPrimitive() {
+    return this.props;
   }
 }
