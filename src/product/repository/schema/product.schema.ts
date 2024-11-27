@@ -27,6 +27,12 @@ export class ProductSchema {
     required: true,
     type: Number,
   })
+  quantity: number;
+
+  @Prop({
+    required: true,
+    type: Number,
+  })
   price: number;
 
   @Prop()

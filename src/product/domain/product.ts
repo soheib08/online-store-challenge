@@ -6,6 +6,7 @@ export type ProductProps = {
   title: string;
   description: string;
   price: number;
+  quantity: number;
   image?: string;
   createdAt?: Date;
   updatedAt?: Date;
