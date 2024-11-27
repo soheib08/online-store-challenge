@@ -4,10 +4,10 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { TransactionManager } from 'src/app/services/transaction-executer';
 import { Order } from 'src/order/domain/order';
 import { IOrderRepository } from 'src/order/domain/order-repository';
-import { Product } from 'src/product/domain/product';
-import { IProductRepository } from 'src/product/domain/product-repository';
+import { DecrementProductQuantityService } from 'src/product/services/decrement-product-count.service';
 import { GetProductService } from 'src/product/services/get-product.service';
 
 export class SubmitOrderCommand {
@@ -29,7 +29,7 @@ export class SubmitOrderCommandHandler
   constructor(
     private readonly getProductService: GetProductService,
     @Inject(IOrderRepository) private orderRepo: IOrderRepository,
-    private eventBus: EventBus,
+    private decrementProductQuantityService: DecrementProductQuantityService,
   ) {}
 
   async execute({
@@ -53,9 +53,34 @@ export class SubmitOrderCommandHandler
     });
 
     order.calculatePrice();
-    let orderCreatedStatus = await this.orderRepo.create(order);
 
-    if (!orderCreatedStatus)
-      throw new InternalServerErrorException('order is not created');
+    const transactionCallback = async (
+      transactionManager: TransactionManager,
+    ): Promise<boolean> => {
+      try {
+        const orderCreatedStatus = await this.orderRepo.create(order);
+        if (!orderCreatedStatus) throw new Error('order can not be created');
+
+        await this.decrementProductQuantityService.execute(
+          productId,
+          count,
+          transactionManager,
+        );
+
+        return true;
+      } catch (err) {
+        console.error(err);
+        throw new Error('order can not be created');
+      }
+    };
+
+    try {
+      const createOrderResult =
+        await this.orderRepo.executeTransaction(transactionCallback);
+
+      if (!createOrderResult) throw new Error('create order failed');
+    } catch (err) {
+      throw new InternalServerErrorException('order is not submitted');
+    }
   }
 }

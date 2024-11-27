@@ -1,25 +1,32 @@
 import { Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
+import { ClientSession, Connection, Model } from 'mongoose';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { OrderDocument } from './schema/order.schema';
 import { Order } from '../domain/order';
 import { IOrderRepository } from '../domain/order-repository';
+import { MongooseTransactionExecuter } from 'src/app/services/transaction-executer';
 
 @Injectable()
-export class OrderRepositoryMongo implements IOrderRepository {
+export class OrderRepositoryMongo
+  extends MongooseTransactionExecuter
+  implements IOrderRepository
+{
   constructor(
     @InjectModel(Order.name)
     private model: Model<OrderDocument>,
-  ) {}
+    @InjectConnection() connection: Connection,
+  ) {
+    super(connection);
+  }
 
-  async create(entity: Order): Promise<boolean> {
+  async create(entity: Order, session?: ClientSession): Promise<boolean> {
     try {
       const { id, ...rest } = entity.toPrimitive();
 
       await new this.model({
         _id: id,
         ...rest,
-      }).save();
+      }).save({ session });
       return true;
     } catch (error) {
       console.error({ error });

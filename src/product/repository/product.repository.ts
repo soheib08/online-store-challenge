@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { IProductRepository } from '../domain/product-repository';
 import { Product } from '../domain/product';
-import { Model } from 'mongoose';
+import { ClientSession, Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { ProductDocument } from './schema/product.schema';
+import { TransactionManager } from 'src/app/services/transaction-executer';
 
 @Injectable()
 export class ProductRepositoryMongo implements IProductRepository {
@@ -94,5 +95,28 @@ export class ProductRepositoryMongo implements IProductRepository {
       console.error(error);
     }
     return false;
+  }
+
+  async findByIdAndDecrementQuantity(
+    productId: string,
+    count: number,
+    session?: ClientSession,
+  ): Promise<boolean> {
+    try {
+      const updateResult = await this.model.findOneAndUpdate(
+        { _id: productId, quantity: { $gte: count } },
+        { $inc: { quantity: -count } },
+        { session },
+      );
+
+      if (!updateResult) {
+        throw new Error(
+          'not enough products in stock or concurrent modifications.',
+        );
+      }
+    } catch (err) {
+      console.error(err);
+      return false;
+    }
   }
 }

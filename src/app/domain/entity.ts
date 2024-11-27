@@ -1,4 +1,4 @@
-import { UUIDGenerator } from '../utils/uuid-generator';
+import { UUIDGenerator } from '../services/uuid-generator';
 
 export abstract class Entity<T> {
   private _id: string;
