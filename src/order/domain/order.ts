@@ -1,20 +1,25 @@
 import { Entity } from 'src/app/domain/entity';
 import { ProductProps } from 'src/product/domain/product';
+import { OrderProductDto } from './dto/order-product.do';
+import { OrderStatusEnum } from './constants/order-status.enum';
 
 export type OrderProps = {
   id?: string;
+  userId: string;
   productId: string;
+  productPrice: number;
+  count: number;
   product?: ProductProps;
-  title: string;
-  description: string;
-  price: number;
-  quantity: number;
-  image?: string;
+  status: OrderStatusEnum;
+  finalPrice: number;
   createdAt?: Date;
   updatedAt?: Date;
 };
 
-export type AddOrderInp = Omit<OrderProps, 'updatedAt' | 'createdAt' | 'id'>;
+export type AddOrderInp = Omit<
+  OrderProps,
+  'updatedAt' | 'createdAt' | 'id' | 'product' | 'status' | 'finalPrice'
+>;
 
 export class Order extends Entity<OrderProps> {
   private constructor(props: OrderProps) {
@@ -22,10 +27,37 @@ export class Order extends Entity<OrderProps> {
   }
 
   static New(inp: AddOrderInp): Order {
-    return new Order({ ...inp });
+    return new Order({
+      ...inp,
+      status: OrderStatusEnum.PENDING,
+      finalPrice: 0,
+    });
   }
 
   static fromPrimitive(prim: OrderProps) {
     return new Order({ ...prim });
+  }
+
+  //getters
+  get user() {
+    return this.props.userId;
+  }
+
+  get product(): OrderProductDto {
+    const { id, title, price } = this.props.product;
+    return new OrderProductDto(id, title, price);
+  }
+
+  get count() {
+    return this.props.count;
+  }
+
+  get date() {
+    return this.createdAt;
+  }
+
+  //logic
+  calculatePrice() {
+    this.props.finalPrice = this.count * this.props.productPrice;
   }
 }

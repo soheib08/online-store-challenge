@@ -9,13 +9,13 @@ import {
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ProductDto } from 'src/product/domain/product.dto';
-import { ProductDisplayQuery } from '../queries/display-product.query';
+import { ProductDisplayQuery } from '../application/queries/display-product.query';
 import { UuidDto } from 'src/app/dto/uuid.dto';
 import { CreateProductRequest } from './dto/create-product.dto';
-import { CreateProductCommand } from '../commands/create-product.command';
-import { DeleteProductCommand } from '../commands/delete-product.command';
+import { CreateProductCommand } from '../application/commands/create-product.command';
+import { DeleteProductCommand } from '../application/commands/delete-product.command';
 import { UpdateProductRequest } from './dto/update-product.dto';
-import { UpdateProductCommand } from '../commands/update-product.command';
+import { UpdateProductCommand } from '../application/commands/update-product.command';
 
 @Controller()
 export class ProductController {

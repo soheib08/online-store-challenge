@@ -80,6 +80,16 @@ export class Product extends Entity<ProductProps> {
     if (quantity) updateDto.quantity = quantity;
     if (image) updateDto.image = image;
 
-    this.update(updateDto);
+    this.updateEntity(updateDto);
+  }
+
+  isProductCanBePurchased(): boolean {
+    if (this.props.quantity > 0) return true;
+    else return false;
+  }
+
+  isQuantityAvailable(count: number): boolean {
+    if (count > this.props.quantity) return false;
+    else return true;
   }
 }

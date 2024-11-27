@@ -3,8 +3,8 @@ import { UUIDGenerator } from '../utils/uuid-generator';
 export abstract class Entity<T> {
   private _id: string;
   private _props: T;
-  createdAt: number;
-  updatedAt: number;
+  createdAt: Date;
+  updatedAt: Date;
 
   constructor(entityProps: T) {
     this._id = UUIDGenerator.create();

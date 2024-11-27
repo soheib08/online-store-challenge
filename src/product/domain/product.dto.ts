@@ -1,5 +1,4 @@
 import { CategoryDto } from './category.dto';
-import { Product } from './product';
 
 export class ProductDto {
   id: string;
@@ -7,10 +6,10 @@ export class ProductDto {
   description: string;
   price: number;
   quantity: number;
-  createdAt: number;
+  createdAt: Date;
   category: CategoryDto;
 
-  constructor(product: Product) {
+  constructor(product: ProductDto) {
     this.id = product.id;
     this.title = product.title;
     this.description = product.description;
