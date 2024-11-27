@@ -1,14 +1,14 @@
 import { UUIDGenerator } from '../utils/uuid-generator';
 
 export abstract class Entity<T> {
-  protected _id: string;
-  protected _props: T;
+  private _id: string;
+  private _props: T;
   createdAt: number;
   updatedAt: number;
 
-  constructor(props: T) {
+  constructor(entityProps: T) {
     this._id = UUIDGenerator.create();
-    this._props = props;
+    this._props = entityProps;
   }
 
   get id(): string {
@@ -19,7 +19,7 @@ export abstract class Entity<T> {
     return this._props;
   }
 
-  update(props: Partial<T>): void {
+  protected updateEntity(props: Partial<T>): void {
     this._props = { ...this._props, ...props };
   }
 

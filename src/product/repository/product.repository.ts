@@ -37,7 +37,9 @@ export class ProductRepositoryMongo implements IProductRepository {
   }
   async find(): Promise<{ items: Product[]; count: number }> {
     try {
-      const foundProducts = await this.model.find();
+      const foundProducts = await this.model.find({
+        deletedAt: { $exists: false },
+      });
       const items = foundProducts.map((e) => Product.fromPrimitive(e));
 
       return { items, count: items.length };
@@ -49,7 +51,10 @@ export class ProductRepositoryMongo implements IProductRepository {
 
   async findById(id: string): Promise<Product> {
     try {
-      const found = await this.model.findOne({ _id: id });
+      const found = await this.model.findOne({
+        _id: id,
+        deletedAt: { $exists: false },
+      });
       if (!!found) {
         return Product.fromPrimitive(found.toObject({ virtuals: true }));
       } else {
@@ -65,6 +70,22 @@ export class ProductRepositoryMongo implements IProductRepository {
     const { id, ...rest } = entity.toPrimitive();
     try {
       const result = await this.model.updateOne({ _id: id }, { $set: rest });
+      if (result.matchedCount == 0) {
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.error(error);
+    }
+    return false;
+  }
+
+  async softDelete(id: string): Promise<boolean> {
+    try {
+      const result = await this.model.updateOne(
+        { _id: id },
+        { $set: { deletedAt: new Date() } },
+      );
       if (result.matchedCount == 0) {
         return false;
       }

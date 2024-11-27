@@ -3,7 +3,7 @@ import { ICategoryRepository } from '../domain/category-repository';
 import { CategoryDto } from '../domain/category.dto';
 
 @Injectable()
-export class CategorySeederService {
+export class GetCategoryListService {
   constructor(
     @Inject(ICategoryRepository)
     private repo: ICategoryRepository,

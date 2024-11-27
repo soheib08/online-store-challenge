@@ -1,11 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
+import { Category } from 'src/product/domain/category';
 
 @Schema({ timestamps: true, id: true })
 export class ProductSchema {
   id: string;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Category' })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: Category.name })
   categoryId: string;
 
   @Prop({
@@ -40,6 +41,9 @@ export class ProductSchema {
 
   @Prop()
   updatedAt: Date;
+
+  @Prop()
+  deletedAt?: Date;
 }
 
 export type ProductDocument = HydratedDocument<ProductSchema>;
