@@ -26,4 +26,15 @@ export class ProductInventoryHistory extends Entity<ProductInventoryHistoryProps
   static fromPrimitive(prim: ProductInventoryHistoryProps) {
     return new ProductInventoryHistory({ ...prim });
   }
+
+  get userId() {
+    return this.props.userId;
+  }
+
+  get quantity() {
+    return this.props.quantity;
+  }
+  get date() {
+    return this.props.createdAt;
+  }
 }

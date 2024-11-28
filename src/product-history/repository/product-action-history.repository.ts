@@ -33,7 +33,9 @@ export class ProductActionHistoryRepositoryMongo
     try {
       const list = await this.model.find({ productId });
 
-      const items = list.map((e) => ProductActionHistory.fromPrimitive(e));
+      const items = list.map((e) =>
+        ProductActionHistory.fromPrimitive(e.toObject({ virtuals: true })),
+      );
 
       return items;
     } catch (error) {

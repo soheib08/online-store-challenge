@@ -44,7 +44,6 @@ export const eventHandlers = [
       },
     ]),
     CqrsModule,
-    ProductModule,
   ],
   controllers: [],
   providers: [
@@ -61,6 +60,11 @@ export const eventHandlers = [
       useClass: ProductInventoryHistoryRepositoryMongo,
     },
     ...eventHandlers,
+  ],
+  exports: [
+    IProductInventoryHistoryRepository,
+    IProductPriceHistoryRepository,
+    IProductActionHistoryRepository,
   ],
 })
 export class ProductHistoryModule {}

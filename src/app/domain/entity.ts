@@ -6,9 +6,13 @@ export abstract class Entity<T> {
   createdAt: Date;
   updatedAt: Date;
 
-  constructor(entityProps: T & { id?: string }) {
+  constructor(
+    entityProps: T & { id?: string; createdAt?: Date; updatedAt?: Date },
+  ) {
     this._id = entityProps.id ? entityProps.id : UUIDGenerator.create();
     this._props = entityProps;
+    this.createdAt = entityProps.createdAt;
+    this.updatedAt = entityProps.updatedAt;
   }
 
   get id(): string {

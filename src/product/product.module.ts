@@ -21,6 +21,7 @@ import { DecrementProductQuantityService } from './services/decrement-product-co
 import { GetProductService } from './services/get-product.service';
 import { GetCategoryListService } from './services/get-category-list.service';
 import { ProductListQueryHandler } from './application/queries/get-product-list.query';
+import { ProductHistoryModule } from 'src/product-history/product-history.module';
 
 export const queryHandlers = [
   ProductDisplayQueryHandler,
@@ -47,6 +48,7 @@ export const commandHandlers = [
       },
     ]),
     CqrsModule,
+    ProductHistoryModule,
   ],
   controllers: [CategoryController, ProductController],
   providers: [

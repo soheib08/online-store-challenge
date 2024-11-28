@@ -27,4 +27,16 @@ export class ProductActionHistory extends Entity<ProductActionHistoryProps> {
   static fromPrimitive(prim: ProductActionHistoryProps) {
     return new ProductActionHistory({ ...prim });
   }
+
+  get action() {
+    return this.props.action;
+  }
+
+  get userId() {
+    return this.props.userId;
+  }
+
+  get date() {
+    return this.props.createdAt;
+  }
 }

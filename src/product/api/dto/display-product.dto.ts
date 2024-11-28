@@ -6,15 +6,15 @@ import { ProductDto } from 'src/product/domain/dto/product.dto';
 
 export class ProductPropertyHistoryDto {
   @ApiProperty({ example: new Date() })
-  date: string;
+  date: Date;
 
   @ApiProperty({ example: 20 })
-  value: string;
+  value: number;
 }
 
 export class ProductActionHistoryDto {
   @ApiProperty({ example: new Date() })
-  date: string;
+  date: Date;
 
   @ApiProperty({
     enum: ProductActionHistoryEnum,

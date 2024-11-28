@@ -24,7 +24,6 @@ import { WrapResponseInterceptor } from './middlewares/wrap-response.interceptor
     CqrsModule.forRoot(),
     ProductModule,
     OrderModule,
-    ProductHistoryModule,
   ],
   controllers: [],
   providers: [
