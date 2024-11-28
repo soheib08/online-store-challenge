@@ -61,7 +61,7 @@ export class Product extends Entity<ProductProps> {
   }
 
   get category(): CategoryDto {
-    return { id: this.props.category.id, title: this.props.category.title };
+    return { id: this.props.category?.id, title: this.props.category?.title };
   }
 
   //logics
@@ -72,7 +72,7 @@ export class Product extends Entity<ProductProps> {
     quantity,
     image,
   }: Partial<ProductProps>) {
-    let updateDto: Partial<ProductProps>;
+    let updateDto: Partial<ProductProps> = {};
 
     if (title) updateDto.title = title;
     if (description) updateDto.description = description;

@@ -1,8 +1,13 @@
-import { Inject, InternalServerErrorException } from '@nestjs/common';
+import {
+  Inject,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { Product } from 'src/product/domain/entity/product';
 import { IProductRepository } from 'src/product/domain/repository/product-repository';
 import { ProductCreatedEvent } from '../../domain/events/product-created.event';
+import { ICategoryRepository } from 'src/product/domain/repository/category-repository';
 
 export class CreateProductCommand {
   categoryId: string;
@@ -31,6 +36,9 @@ export class CreateProductCommandHandler
   constructor(
     @Inject(IProductRepository)
     private readonly repo: IProductRepository,
+    @Inject(ICategoryRepository)
+    private readonly categoryRepository: ICategoryRepository,
+
     private readonly eventBus: EventBus,
   ) {}
 
@@ -51,6 +59,9 @@ export class CreateProductCommandHandler
       image,
       quantity,
     });
+
+    const foundCategory = await this.categoryRepository.findById(categoryId);
+    if (!foundCategory) throw new NotFoundException('category not found');
 
     const result = await this.repo.create(productEntity);
     if (!result)

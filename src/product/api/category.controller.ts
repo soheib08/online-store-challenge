@@ -1,14 +1,21 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
-import { CategoryListQuery } from '../application/queries/get-categories-list.query';
-import { CategoryDto } from '../domain/dto/category.dto';
+import {
+  CategoryItemDto,
+  CategoryListQuery,
+} from '../application/queries/get-categories-list.query';
+import { ApiOkResponse } from '@nestjs/swagger';
 
 @Controller('categories')
 export class CategoryController {
   constructor(private readonly queryBus: QueryBus) {}
 
   @Get()
-  async getCategoryList(): Promise<Array<CategoryDto>> {
+  @ApiOkResponse({
+    type: CategoryItemDto,
+  })
+  @HttpCode(HttpStatus.OK)
+  async getCategoryList(): Promise<Array<CategoryItemDto>> {
     return await this.queryBus.execute(new CategoryListQuery());
   }
 }

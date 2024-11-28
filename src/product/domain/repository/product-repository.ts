@@ -5,6 +5,7 @@ import { TransactionManager } from 'src/app/services/transaction-executer';
 export const IProductRepository = Symbol('IProductRepository');
 export interface IProductRepository extends EntityRepository<Product> {
   softDelete(id: string): Promise<boolean>;
+  findOneWithCategoryData(id: string): Promise<Product>;
   findByIdAndDecrementQuantity(
     productId: string,
     count: number,

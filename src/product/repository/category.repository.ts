@@ -52,7 +52,9 @@ export class CategoryRepositoryMongo implements ICategoryRepository {
   async find(): Promise<{ items: Category[]; count: number }> {
     try {
       const foundCategories = await this.model.find();
-      const items = foundCategories.map((e) => Category.fromPrimitive(e));
+      const items = foundCategories.map((e) =>
+        Category.fromPrimitive(e.toObject({ virtuals: true })),
+      );
 
       return { items, count: items.length };
     } catch (err) {

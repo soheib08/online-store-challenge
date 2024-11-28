@@ -1,27 +1,27 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsMongoId,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
   IsUrl,
-  IsUUID,
 } from 'class-validator';
 
 export class CreateProductRequest {
-  @ApiProperty()
+  @ApiProperty({ example: 'mug' })
   @IsNotEmpty()
   @IsString()
   title: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'glass' })
   @IsNotEmpty()
   @IsString()
   description: string;
 
-  @ApiProperty({ example: 'uuid' })
+  @ApiProperty({ example: '67486fc0bd77c40b2936da14' })
   @IsNotEmpty()
-  @IsUUID()
+  @IsMongoId()
   categoryId: string;
 
   @ApiProperty({ example: 300000, type: Number })
@@ -34,7 +34,7 @@ export class CreateProductRequest {
   @IsNumber()
   quantity: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: '' })
   @IsOptional()
   @IsUrl()
   image?: string;

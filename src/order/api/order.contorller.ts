@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { OrderDto } from '../domain/dto/order.dto';
 import { SubmitOrderCommand } from '../application/commands/submit-order.command';
 import { SubmitOrderRequest } from './dto/submit-order.dto';
 import { CurrentUser } from 'src/app/middlewares/user.decorator';
@@ -25,6 +24,6 @@ export class OrderController {
 
   @Get('user/orders')
   async getUserOrders(@CurrentUser() userId: string): Promise<void> {
-    await this.commandBus.execute(new UserOrdersQuery(userId));
+    await this.queryBus.execute(new UserOrdersQuery(userId));
   }
 }

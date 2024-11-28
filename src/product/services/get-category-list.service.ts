@@ -11,6 +11,7 @@ export class GetCategoryListService {
 
   async getCategoryList(): Promise<Array<CategoryDto>> {
     const foundCategories = await this.repo.find();
+
     return foundCategories.items.map((e) => e.toDto());
   }
 }

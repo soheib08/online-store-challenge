@@ -5,6 +5,7 @@ import { ClientSession, Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { ProductDocument } from './schema/product.schema';
 import { TransactionManager } from 'src/app/services/transaction-executer';
+import { Category } from '../domain/entity/category';
 
 @Injectable()
 export class ProductRepositoryMongo implements IProductRepository {
@@ -38,10 +39,15 @@ export class ProductRepositoryMongo implements IProductRepository {
   }
   async find(): Promise<{ items: Product[]; count: number }> {
     try {
-      const foundProducts = await this.model.find({
-        deletedAt: { $exists: false },
-      });
-      const items = foundProducts.map((e) => Product.fromPrimitive(e));
+      const foundProducts = await this.model
+        .find({
+          deletedAt: { $exists: false },
+        })
+        .populate({ path: 'category', model: Category.name });
+
+      const items = foundProducts.map((e) =>
+        Product.fromPrimitive(e.toObject({ virtuals: true })),
+      );
 
       return { items, count: items.length };
     } catch (err) {
@@ -56,6 +62,27 @@ export class ProductRepositoryMongo implements IProductRepository {
         _id: id,
         deletedAt: { $exists: false },
       });
+
+      if (!!found) {
+        return Product.fromPrimitive(found.toObject({ virtuals: true }));
+      } else {
+        return null;
+      }
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  }
+
+  async findOneWithCategoryData(id: string): Promise<Product> {
+    try {
+      const found = await this.model
+        .findOne({
+          _id: id,
+          deletedAt: { $exists: false },
+        })
+        .populate({ path: 'category', model: Category.name });
+
       if (!!found) {
         return Product.fromPrimitive(found.toObject({ virtuals: true }));
       } else {

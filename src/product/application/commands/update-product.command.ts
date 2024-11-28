@@ -6,6 +6,8 @@ import {
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { IProductRepository } from 'src/product/domain/repository/product-repository';
 import { ProductUpdatedEvent } from '../../domain/events/product-updated.event';
+import { ProductInventoryChangedEvent } from 'src/product/domain/events/inventory-changed.event';
+import { ProductPriceChangedEvent } from 'src/product/domain/events/price-changed.event';
 
 export class UpdateProductCommand {
   id: string;
@@ -28,7 +30,7 @@ export class UpdateProductCommand {
 }
 
 @CommandHandler(UpdateProductCommand)
-export class CreateProductCommandHandler
+export class UpdateProductCommandHandler
   implements ICommandHandler<UpdateProductCommand>
 {
   constructor(
@@ -47,7 +49,14 @@ export class CreateProductCommandHandler
     userId,
   }: UpdateProductCommand): Promise<void> {
     const foundProduct = await this.repo.findById(id);
+
     if (!foundProduct) throw new NotFoundException('product not found');
+
+    const inventoryChanged = this.isInventoryChanged(
+      quantity,
+      foundProduct.quantity,
+    );
+    const priceChanged = this.isPriceChanged(price, foundProduct.price);
 
     foundProduct.update({ description, title, price, quantity, image });
 
@@ -57,17 +66,21 @@ export class CreateProductCommandHandler
 
     this.eventBus.publish(new ProductUpdatedEvent(foundProduct.id, userId));
 
-    if (this.isInventoryChanged)
-      this.eventBus.publish(new ProductUpdatedEvent(foundProduct.id, userId));
+    if (inventoryChanged)
+      this.eventBus.publish(
+        new ProductInventoryChangedEvent(foundProduct.id, userId, quantity),
+      );
 
-    if (this.isPriceChanged)
-      this.eventBus.publish(new ProductUpdatedEvent(foundProduct.id, userId));
+    if (priceChanged)
+      this.eventBus.publish(
+        new ProductPriceChangedEvent(foundProduct.id, userId, price),
+      );
   }
 
-  private isPriceChanged(price: number) {
-    return typeof price !== 'undefined';
+  private isPriceChanged(price: number, perviousValue: number) {
+    return typeof price !== 'undefined' && price !== perviousValue;
   }
-  private isInventoryChanged(quantity: number): boolean {
-    return typeof quantity !== 'undefined';
+  private isInventoryChanged(quantity: number, perviousValue: number): boolean {
+    return typeof quantity !== 'undefined' && quantity !== perviousValue;
   }
 }

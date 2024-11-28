@@ -28,7 +28,7 @@ export class Category extends Entity<CategoryProps> {
 
   toDto(): CategoryDto {
     return {
-      id: this.id,
+      id: this.props.id,
       title: this.props.title,
     };
   }

@@ -16,8 +16,8 @@ export class ProductDisplayQueryHandler
     private readonly repo: IProductRepository,
   ) {}
 
-  async execute(query: ProductDisplayQuery): Promise<ProductDto> {
-    let foundProduct = await this.repo.findById(query.id);
+  async execute({ id }: ProductDisplayQuery): Promise<ProductDto> {
+    let foundProduct = await this.repo.findOneWithCategoryData(id);
     if (!foundProduct) throw new NotFoundException('product not found');
 
     return foundProduct.toDto();

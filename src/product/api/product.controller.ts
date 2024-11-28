@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ProductDisplayQuery } from '../application/queries/display-product.query';
-import { UuidDto } from 'src/app/dto/uuid.dto';
+import { ObjectIdDto } from 'src/app/dto/objectId.dto';
 import { CreateProductRequest } from './dto/create-product.dto';
 import { CreateProductCommand } from '../application/commands/create-product.command';
 import { DeleteProductCommand } from '../application/commands/delete-product.command';
@@ -17,8 +17,11 @@ import { UpdateProductRequest } from './dto/update-product.dto';
 import { UpdateProductCommand } from '../application/commands/update-product.command';
 import { CurrentUser } from 'src/app/middlewares/user.decorator';
 import { ProductDto } from '../domain/dto/product.dto';
+import { ProductListQuery } from '../application/queries/get-product-list.query';
+import { ApiOkResponse } from '@nestjs/swagger';
+import { ProductDisplayDto } from './dto/display-product.dto';
 
-@Controller()
+@Controller('products')
 export class ProductController {
   constructor(
     private readonly commandBus: CommandBus,
@@ -26,12 +29,13 @@ export class ProductController {
   ) {}
 
   @Get('')
-  async getProductList(@Param() { id }: UuidDto): Promise<ProductDto> {
-    return await this.queryBus.execute(new ProductDisplayQuery(id));
+  @ApiOkResponse({ type: ProductDisplayDto, isArray: true })
+  async getProductList(): Promise<Array<ProductDto>> {
+    return await this.queryBus.execute(new ProductListQuery());
   }
 
-  @Get(':id')
-  async displayProduct(@Param() { id }: UuidDto): Promise<ProductDto> {
+  @Get('/:id')
+  async displayProduct(@Param() { id }: ObjectIdDto): Promise<ProductDto> {
     return await this.queryBus.execute(new ProductDisplayQuery(id));
   }
 
@@ -45,8 +49,8 @@ export class ProductController {
 
   @Patch(':id')
   async updateProduct(
-    @Param() { id }: UuidDto,
-    @Body() dto: UpdateProductRequest,
+    @Param() { id }: ObjectIdDto,
+    @Body() dto: CreateProductRequest,
     @CurrentUser() userId: string,
   ) {
     await this.commandBus.execute(
@@ -55,7 +59,10 @@ export class ProductController {
   }
 
   @Delete(':id')
-  async deleteProduct(@Param() { id }: UuidDto, @CurrentUser() userId: string) {
+  async deleteProduct(
+    @Param() { id }: ObjectIdDto,
+    @CurrentUser() userId: string,
+  ) {
     await this.commandBus.execute(new DeleteProductCommand(id, userId));
   }
 }
