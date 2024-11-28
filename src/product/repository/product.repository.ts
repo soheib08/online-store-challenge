@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { IProductRepository } from '../domain/product-repository';
-import { Product } from '../domain/product';
+import { IProductRepository } from '../domain/repository/product-repository';
+import { Product } from '../domain/entity/product';
 import { ClientSession, Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { ProductDocument } from './schema/product.schema';

@@ -1,7 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { CategoryDto } from 'src/product/domain/category.dto';
-import { IProductRepository } from 'src/product/domain/product-repository';
+import { CategoryDto } from 'src/product/domain/dto/category.dto';
+import { IProductRepository } from 'src/product/domain/repository/product-repository';
 import { GetCategoryListService } from 'src/product/services/get-category-list.service';
 
 export class CategoryListQuery {

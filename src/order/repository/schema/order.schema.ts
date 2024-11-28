@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
 import { OrderStatusEnum } from 'src/order/domain/constants/order-status.enum';
-import { Product } from 'src/product/domain/product';
+import { Product } from 'src/product/domain/entity/product';
 
 @Schema({ timestamps: true, id: true })
 export class OrderSchema {

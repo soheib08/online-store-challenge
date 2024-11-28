@@ -1,5 +1,5 @@
 import { Entity } from 'src/app/domain/entity';
-import { ProductProps } from 'src/product/domain/product';
+import { ProductProps } from 'src/product/domain/entity/product';
 import { OrderProductDto } from './dto/order-product.do';
 import { OrderStatusEnum } from './constants/order-status.enum';
 

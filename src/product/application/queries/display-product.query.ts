@@ -1,7 +1,7 @@
 import { Inject, NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { IProductRepository } from 'src/product/domain/product-repository';
-import { ProductDto } from 'src/product/domain/product.dto';
+import { ProductDto } from 'src/product/domain/dto/product.dto';
+import { IProductRepository } from 'src/product/domain/repository/product-repository';
 
 export class ProductDisplayQuery {
   constructor(public readonly id: string) {}

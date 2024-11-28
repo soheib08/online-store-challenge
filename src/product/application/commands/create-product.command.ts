@@ -1,7 +1,8 @@
 import { Inject, InternalServerErrorException } from '@nestjs/common';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { Product } from 'src/product/domain/product';
-import { IProductRepository } from 'src/product/domain/product-repository';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { Product } from 'src/product/domain/entity/product';
+import { IProductRepository } from 'src/product/domain/repository/product-repository';
+import { ProductCreatedEvent } from '../../domain/events/product-created.event';
 
 export class CreateProductCommand {
   categoryId: string;
@@ -10,6 +11,7 @@ export class CreateProductCommand {
   price: number;
   quantity: number;
   image?: string;
+  userId: string;
 
   constructor(args: CreateProductCommand) {
     this.categoryId = args.categoryId;
@@ -18,6 +20,7 @@ export class CreateProductCommand {
     this.price = args.price;
     this.quantity = args.quantity;
     this.image = args.image;
+    this.userId = args.userId;
   }
 }
 
@@ -28,6 +31,7 @@ export class CreateProductCommandHandler
   constructor(
     @Inject(IProductRepository)
     private readonly repo: IProductRepository,
+    private readonly eventBus: EventBus,
   ) {}
 
   async execute({
@@ -37,6 +41,7 @@ export class CreateProductCommandHandler
     price,
     quantity,
     image,
+    userId,
   }: CreateProductCommand): Promise<void> {
     const productEntity = Product.New({
       categoryId,
@@ -50,5 +55,7 @@ export class CreateProductCommandHandler
     const result = await this.repo.create(productEntity);
     if (!result)
       throw new InternalServerErrorException('error in adding product');
+
+    this.eventBus.publish(new ProductCreatedEvent(productEntity.id, userId));
   }
 }

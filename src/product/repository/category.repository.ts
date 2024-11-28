@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { ICategoryRepository } from '../domain/category-repository';
-import { Category } from '../domain/category';
+import { ICategoryRepository } from '../domain/repository/category-repository';
+import { Category } from '../domain/entity/category';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { CategoryDocument } from './schema/category.schema';

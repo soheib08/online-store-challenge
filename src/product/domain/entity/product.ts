@@ -1,7 +1,7 @@
 import { Entity } from 'src/app/domain/entity';
-import { ProductDto } from './product.dto';
-import { CategoryDto } from './category.dto';
 import { CategoryProps } from './category';
+import { ProductDto } from '../dto/product.dto';
+import { CategoryDto } from '../dto/category.dto';
 
 export type ProductProps = {
   id?: string;

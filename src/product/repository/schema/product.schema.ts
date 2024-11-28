@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
-import { Category } from 'src/product/domain/category';
+import { Category } from 'src/product/domain/entity/category';
 
 @Schema({ timestamps: true, id: true })
 export class ProductSchema {

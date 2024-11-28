@@ -1,6 +1,6 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { AddCategoryInp, Category } from '../domain/category';
-import { ICategoryRepository } from '../domain/category-repository';
+import { AddCategoryInp, Category } from '../domain/entity/category';
+import { ICategoryRepository } from '../domain/repository/category-repository';
 
 export const CategorySeedData: AddCategoryInp[] = [
   {

@@ -1,5 +1,5 @@
 import { Entity } from 'src/app/domain/entity';
-import { CategoryDto } from './category.dto';
+import { CategoryDto } from '../dto/category.dto';
 
 export type CategoryProps = {
   id?: string;

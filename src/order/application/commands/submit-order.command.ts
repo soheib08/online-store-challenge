@@ -3,7 +3,7 @@ import {
   Inject,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { TransactionManager } from 'src/app/services/transaction-executer';
 import { Order } from 'src/order/domain/order';
 import { IOrderRepository } from 'src/order/domain/order-repository';

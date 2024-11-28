@@ -3,8 +3,9 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { IProductRepository } from 'src/product/domain/product-repository';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import { IProductRepository } from 'src/product/domain/repository/product-repository';
+import { ProductUpdatedEvent } from '../../domain/events/product-updated.event';
 
 export class UpdateProductCommand {
   id: string;
@@ -13,6 +14,7 @@ export class UpdateProductCommand {
   price?: number;
   quantity?: number;
   image?: string;
+  userId: string;
 
   constructor(args: UpdateProductCommand) {
     this.id = args.id;
@@ -21,6 +23,7 @@ export class UpdateProductCommand {
     this.price = args.price;
     this.quantity = args.quantity;
     this.image = args.image;
+    this.userId = args.userId;
   }
 }
 
@@ -31,6 +34,7 @@ export class CreateProductCommandHandler
   constructor(
     @Inject(IProductRepository)
     private readonly repo: IProductRepository,
+    private readonly eventBus: EventBus,
   ) {}
 
   async execute({
@@ -40,6 +44,7 @@ export class CreateProductCommandHandler
     price,
     quantity,
     image,
+    userId,
   }: UpdateProductCommand): Promise<void> {
     const foundProduct = await this.repo.findById(id);
     if (!foundProduct) throw new NotFoundException('product not found');
@@ -49,5 +54,20 @@ export class CreateProductCommandHandler
     const result = await this.repo.update(foundProduct);
     if (!result)
       throw new InternalServerErrorException('error in updating product');
+
+    this.eventBus.publish(new ProductUpdatedEvent(foundProduct.id, userId));
+
+    if (this.isInventoryChanged)
+      this.eventBus.publish(new ProductUpdatedEvent(foundProduct.id, userId));
+
+    if (this.isPriceChanged)
+      this.eventBus.publish(new ProductUpdatedEvent(foundProduct.id, userId));
+  }
+
+  private isPriceChanged(price: number) {
+    return typeof price !== 'undefined';
+  }
+  private isInventoryChanged(quantity: number): boolean {
+    return typeof quantity !== 'undefined';
   }
 }

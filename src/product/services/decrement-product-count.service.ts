@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { IProductRepository } from '../domain/product-repository';
+import { IProductRepository } from '../domain/repository/product-repository';
 import { TransactionManager } from 'src/app/services/transaction-executer';
 
 @Injectable()
