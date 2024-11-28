@@ -3,7 +3,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
 import { MongooseModule } from '@nestjs/mongoose';
 import { OrderModule } from 'src/order/order.module';
-import { ProductHistoryModule } from 'src/product-history/product-history.module';
 import { ProductModule } from 'src/product/product.module';
 import { IUuidGeneratorService } from './domain/uuid-generator';
 import { UUIDGenerator } from './services/uuid-generator';

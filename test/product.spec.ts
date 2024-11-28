@@ -1,11 +1,8 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
-import { AppModule } from '../src/app/app.module';
-import { UserId } from '../src/app/middlewares/currentUser';
-import { AddProductInp } from '../src/product/domain/entity/product';
-import { ProductDto } from '../src/product/domain/dto/product.dto';
-import { SubmitOrderRequest } from '../src/order/api/dto/submit-order.dto';
+import { AppModule } from 'src/app/app.module';
+import { ProductDto } from 'src/product/domain/dto/product.dto';
 
 describe('Product and Order End-to-End Tests', () => {
   let app: INestApplication;
