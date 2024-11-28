@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsUUID } from 'class-validator';
 
 export class SubmitOrderRequest {
-  @ApiProperty({ example: 'uuid example' })
+  @ApiProperty({ example: '67486fc0bd77c40b2936da14' })
   @IsUUID()
   @IsNotEmpty()
   productId: string;

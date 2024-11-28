@@ -4,13 +4,14 @@ import {
   CategoryItemDto,
   CategoryListQuery,
 } from '../application/queries/get-categories-list.query';
-import { ApiOkResponse } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 
 @Controller('categories')
 export class CategoryController {
   constructor(private readonly queryBus: QueryBus) {}
 
   @Get()
+  @ApiOperation({ summary: 'category list api' })
   @ApiOkResponse({
     type: CategoryItemDto,
   })
