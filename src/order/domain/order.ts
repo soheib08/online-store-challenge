@@ -1,7 +1,8 @@
 import { Entity } from 'src/app/domain/entity';
 import { ProductProps } from 'src/product/domain/entity/product';
-import { OrderProductDto } from './dto/order-product.do';
 import { OrderStatusEnum } from './constants/order-status.enum';
+import { OrderProductDto } from './dto/order-product.dto';
+import { OrderDto } from './dto/order.dto';
 
 export type OrderProps = {
   id?: string;
@@ -38,6 +39,10 @@ export class Order extends Entity<OrderProps> {
     return new Order({ ...prim });
   }
 
+  toDto(): OrderDto {
+    return new OrderDto({ ...this.props });
+  }
+
   //getters
   get user() {
     return this.props.userId;
@@ -45,7 +50,7 @@ export class Order extends Entity<OrderProps> {
 
   get product(): OrderProductDto {
     const { id, title, price } = this.props.product;
-    return new OrderProductDto(id, title, price);
+    return new OrderProductDto(id, price, title);
   }
 
   get count() {
