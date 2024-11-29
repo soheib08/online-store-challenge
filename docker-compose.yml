@@ -1,0 +1,32 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"  
+    volumes:
+      - mongodb_data:/data/db  
+    networks:
+      - app-network
+  
+  app:
+    build: .
+    container_name: store-app
+    ports:
+      - "3000:3000"  
+    environment:
+      - MONGODB_URL=mongodb://mongodb:27017/store
+      - PORT=3000  
+    depends_on:
+      - mongodb  
+    networks:
+      - app-network
+    command: npm run start:dev  
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    driver: local
