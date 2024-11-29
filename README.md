@@ -79,9 +79,9 @@ This project implements an online store management API using NestJS. The applica
 
 2. Clone the repository:
 
-```bash
-npm install
-```
+   ```bash
+   npm install
+   ```
 
 3. Create a .env file based on .env.example:
    • Example .env content:
@@ -105,18 +105,18 @@ npm install
 
 • To execute all test cases for the application:
 
-```bash
-npm run test
-```
+    ```bash
+    npm run test
+    ```
 
 ### **Docker Setup**
 
     1.	Ensure Docker is installed and running on your system.
     2.	Build and run the application using Docker Compose:
 
-```bash
-docker compose up
-```
+    ```bash
+    docker compose up
+    ```
 
     3.	The application will be available on http://localhost:3000.
 
