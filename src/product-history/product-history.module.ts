@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ProductModule } from 'src/product/product.module';
 import { ProductActionHistory } from './domain/entity/product-action-history';
 import { ProductActionHistorySchemaMongo } from './repository/schema/product-action-history.schema';
 import { CqrsModule } from '@nestjs/cqrs';
@@ -19,6 +18,7 @@ import { PriceChangedEventHandler } from './handlers/price-changed.handler';
 import { ProductCreatedEventHandler } from './handlers/product-created.handler';
 import { ProductUpdatedEventHandler } from './handlers/product-updated.handler';
 import { ProductDeletedEventHandler } from './handlers/product-deleted.handler';
+import { OrderCreatedEventHandler } from './handlers/order-created.handler';
 
 export const eventHandlers = [
   ProductInventoryChangedEventHandler,
@@ -26,6 +26,7 @@ export const eventHandlers = [
   ProductCreatedEventHandler,
   ProductUpdatedEventHandler,
   ProductDeletedEventHandler,
+  OrderCreatedEventHandler,
 ];
 @Module({
   imports: [
