@@ -43,7 +43,8 @@ export class ProductRepositoryMongo implements IProductRepository {
         .find({
           deletedAt: { $exists: false },
         })
-        .populate({ path: 'category', model: Category.name });
+        .populate({ path: 'category', model: Category.name })
+        .sort({ createdAt: -1 });
 
       const items = foundProducts.map((e) =>
         Product.fromPrimitive(e.toObject({ virtuals: true })),
@@ -141,6 +142,7 @@ export class ProductRepositoryMongo implements IProductRepository {
           'not enough products in stock or concurrent modifications.',
         );
       }
+      return true;
     } catch (err) {
       console.error(err);
       return false;

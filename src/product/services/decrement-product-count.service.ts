@@ -19,6 +19,7 @@ export class DecrementProductQuantityService {
       count,
       transactionManager,
     );
+
     if (!result) throw new Error('inventory update failed');
 
     return true;

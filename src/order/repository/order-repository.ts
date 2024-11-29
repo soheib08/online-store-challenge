@@ -44,7 +44,7 @@ export class OrderRepositoryMongo
   }
   async find(): Promise<{ items: Order[]; count: number }> {
     try {
-      const foundOrders = await this.model.find({});
+      const foundOrders = await this.model.find({}).sort({ createdAt: -1 });
       const items = foundOrders.map((e) => Order.fromPrimitive(e));
 
       return { items, count: items.length };
@@ -87,7 +87,7 @@ export class OrderRepositoryMongo
 
   async getByUser(userId: string): Promise<Array<Order>> {
     try {
-      const result = await this.model.find({ userId });
+      const result = await this.model.find({ userId }).sort({ createdAt: -1 });
 
       return result.map((e) => {
         return Order.fromPrimitive(e.toObject({ virtuals: true }));

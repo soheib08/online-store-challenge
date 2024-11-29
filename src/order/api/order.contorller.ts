@@ -6,14 +6,14 @@ import { CurrentUser } from 'src/app/middlewares/user.decorator';
 import { UserOrdersQuery } from '../application/queries/user-orders.query';
 import { ApiOperation } from '@nestjs/swagger';
 
-@Controller()
+@Controller('orders')
 export class OrderController {
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
 
-  @Post('products/purchase')
+  @Post('purchase')
   @ApiOperation({ summary: 'purchase product api' })
   async submitOrder(
     @Body() { count, productId }: SubmitOrderRequest,
@@ -24,7 +24,7 @@ export class OrderController {
     );
   }
 
-  @Get('user/orders')
+  @Get('')
   @ApiOperation({ summary: 'get user orders api' })
   async getUserOrders(@CurrentUser() userId: string): Promise<void> {
     return await this.queryBus.execute(new UserOrdersQuery(userId));
