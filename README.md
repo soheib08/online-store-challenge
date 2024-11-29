@@ -137,6 +137,7 @@ docker compose up
 2. **Repository Pattern**:
    - Abstracts persistence logic and allows technology-agnostic domain layers.
 3. **Dependency Inversion Principle (DIP)**:
-   - Interfaces define repository contracts, with MongoDB implementations in the repository layer, transaction execution and id generating.
+   - Interfaces define repository contracts, with MongoDB implementations in the repository layer, transaction execution and id generating
 4. **Base Entity Abstraction Design**:
    - The `BaseEntity` class provides reusable functionalities for all entities. This can be extended to follow the Factory Method pattern if needed.
+5. **Builder Pattern**:- Use builder pattern to update optional properties in product entity.
