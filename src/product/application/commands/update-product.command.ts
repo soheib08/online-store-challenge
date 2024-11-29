@@ -8,6 +8,8 @@ import { IProductRepository } from 'src/product/domain/repository/product-reposi
 import { ProductUpdatedEvent } from '../../domain/events/product-updated.event';
 import { ProductInventoryChangedEvent } from 'src/product/domain/events/inventory-changed.event';
 import { ProductPriceChangedEvent } from 'src/product/domain/events/price-changed.event';
+import { ProductProps } from 'src/product/domain/entity/product';
+import { ProductUpdateBuilder } from 'src/product/domain/update-product-builder';
 
 export class UpdateProductCommand {
   id: string;
@@ -58,7 +60,15 @@ export class UpdateProductCommandHandler
     );
     const priceChanged = this.isPriceChanged(price, foundProduct.price);
 
-    foundProduct.update({ description, title, price, quantity, image });
+    const updateDto: Partial<ProductProps> = new ProductUpdateBuilder()
+      .setTitle(title)
+      .setDescription(description)
+      .setPrice(price)
+      .setQuantity(quantity)
+      .setImage(image)
+      .build();
+
+    foundProduct.update(updateDto);
 
     const result = await this.repo.update(foundProduct);
     if (!result)

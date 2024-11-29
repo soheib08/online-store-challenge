@@ -3,7 +3,7 @@ import { ProductProps } from './entity/product';
 export class ProductUpdateBuilder {
   private updates: Partial<ProductProps> = {};
 
-  setName(title?: string): ProductUpdateBuilder {
+  setTitle(title?: string): ProductUpdateBuilder {
     if (title) this.updates.title = title;
     return this;
   }

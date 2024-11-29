@@ -66,22 +66,8 @@ export class Product extends Entity<ProductProps> {
   }
 
   //logics
-  update({
-    title,
-    description,
-    price,
-    quantity,
-    image,
-  }: Partial<ProductProps>) {
-    const updateDto: Partial<ProductProps> = new ProductUpdateBuilder()
-      .setName(title)
-      .setDescription(description)
-      .setPrice(price)
-      .setQuantity(quantity)
-      .setImage(image)
-      .build();
-
-    this.updateEntity(updateDto);
+  update(args: Partial<ProductProps>) {
+    this.updateEntity(args);
   }
 
   isProductCanBePurchased(): boolean {
