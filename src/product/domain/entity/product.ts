@@ -2,6 +2,7 @@ import { Entity } from 'src/app/domain/entity';
 import { CategoryProps } from './category';
 import { ProductDto } from '../dto/product.dto';
 import { CategoryDto } from '../dto/category.dto';
+import { ProductUpdateBuilder } from '../update-product-builder';
 
 export type ProductProps = {
   id?: string;
@@ -72,13 +73,13 @@ export class Product extends Entity<ProductProps> {
     quantity,
     image,
   }: Partial<ProductProps>) {
-    let updateDto: Partial<ProductProps> = {};
-
-    if (title) updateDto.title = title;
-    if (description) updateDto.description = description;
-    if (price) updateDto.price = price;
-    if (quantity) updateDto.quantity = quantity;
-    if (image) updateDto.image = image;
+    const updateDto: Partial<ProductProps> = new ProductUpdateBuilder()
+      .setName(title)
+      .setDescription(description)
+      .setPrice(price)
+      .setQuantity(quantity)
+      .setImage(image)
+      .build();
 
     this.updateEntity(updateDto);
   }
